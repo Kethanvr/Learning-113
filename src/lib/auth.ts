@@ -68,6 +68,22 @@ export const authOptions : NextAuthOptions ={
         return session
         }
 
-}
+},
+
+
+
+    pages: {
+        signIn: "/auth/login",
+        error: "/auth/login",
+        newUser: "/auth/register", // Will disable the new account creation screen
+    },
+    session: {
+        strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
+    secret: process.env.NEXTAUTH_SECRET,
+
+
+    
 }
 
