@@ -90,6 +90,11 @@ const VideoSchema = new mongoose.Schema<Ivideo>(
   }
 );
 
+export const VIDEO_DIMENSION = {
+  width: 400,
+  height: 600,
+};
+
 const Video =
   mongoose.models.Video || mongoose.model<Ivideo>("Video", VideoSchema);
 export default Video;
