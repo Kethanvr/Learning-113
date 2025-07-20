@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { VideoUpload } from "@/components/video/video-upload";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface NavigationProps {
@@ -32,6 +32,7 @@ interface NavigationProps {
 export function Navigation({ className }: NavigationProps) {
   const { data: session } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   const handleSignOut = async () => {
@@ -47,174 +48,161 @@ export function Navigation({ className }: NavigationProps) {
     return null;
   }
 
+  const navigationItems = [
+    {
+      name: "Home",
+      href: "/",
+      icon: Home,
+      active: pathname === "/",
+    },
+    {
+      name: "Search",
+      href: "/search",
+      icon: Search,
+      active: pathname === "/search",
+    },
+    {
+      name: "Upload",
+      icon: PlusCircle,
+      onClick: () => setIsUploadOpen(true),
+    },
+    {
+      name: "Profile",
+      href: "/profile",
+      icon: User,
+      active: pathname === "/profile",
+    },
+  ];
+
   return (
     <>
-      {/* Mobile Bottom Navigation */}
-      <nav
-        className={cn(
-          "fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-t border-border/50 md:hidden",
-          className
-        )}
-      >
-        <div className="flex items-center justify-around h-16 px-4">
-          <Link href="/">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex-col gap-1 h-auto py-2"
-            >
-              <Home className="w-6 h-6" />
-              <span className="text-xs">Home</span>
-            </Button>
-          </Link>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-col gap-1 h-auto py-2"
-          >
-            <Search className="w-6 h-6" />
-            <span className="text-xs">Search</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex-col gap-1 h-auto py-2"
-            onClick={() => setIsUploadOpen(true)}
-          >
-            <PlusCircle className="w-6 h-6" />
-            <span className="text-xs">Upload</span>
-          </Button>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex-col gap-1 h-auto py-2"
-              >
-                <User className="w-6 h-6" />
-                <span className="text-xs">Profile</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 mb-2">
-              <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <User className="w-4 h-4 mr-2" />
-                My Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleSignOut}
-                className="text-red-600"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </nav>
-
-      {/* Desktop Side Navigation */}
-      <nav
-        className={cn(
-          "fixed left-0 top-0 bottom-0 z-50 bg-background/95 backdrop-blur-md border-r border-border/50 w-64 hidden md:flex flex-col",
-          className
-        )}
-      >
-        {/* Logo */}
-        <div className="p-6 border-b">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-              <Play className="w-4 h-4 text-white fill-white" />
-            </div>
-            <h1 className="text-xl font-bold">ReelsPro</h1>
-          </Link>
-        </div>
-
-        {/* Navigation Items */}
-        <div className="flex-1 p-4">
-          <div className="space-y-2">
-            <Link href="/">
-              <Button variant="ghost" className="w-full justify-start gap-3">
-                <Home className="w-5 h-5" />
-                Home
-              </Button>
-            </Link>
-
-            <Button variant="ghost" className="w-full justify-start gap-3">
-              <Search className="w-5 h-5" />
-              Search
-            </Button>
-
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3"
-              onClick={() => setIsUploadOpen(true)}
-            >
-              <PlusCircle className="w-5 h-5" />
-              Upload Video
-            </Button>
-
-            <Link href="/profile">
-              <Button variant="ghost" className="w-full justify-start gap-3">
-                <User className="w-5 h-5" />
-                Profile
-              </Button>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-50">
+        <div className="flex flex-col flex-grow pt-5 bg-white/80 backdrop-blur-md border-r border-gray-200 overflow-y-auto">
+          <div className="flex items-center flex-shrink-0 px-4">
+            <Link href="/" className="flex items-center gap-2">
+              <Play className="w-8 h-8 text-purple-600" />
+              <span className="text-xl font-bold text-gray-900">ReelsPro</span>
             </Link>
           </div>
-        </div>
 
-        {/* User Info */}
-        <div className="p-4 border-t">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="w-full justify-start gap-3 h-auto p-3"
-              >
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src="" />
-                  <AvatarFallback className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                    {session.user?.email?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 text-left">
-                  <p className="font-medium text-sm truncate">
-                    @{session.user?.email?.split("@")[0]}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {session.user?.email}
-                  </p>
+          <div className="mt-8 flex-grow flex flex-col">
+            <nav className="flex-1 px-2 space-y-1">
+              {navigationItems.map((item) => (
+                <div key={item.name}>
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
+                        item.active
+                          ? "bg-purple-100 text-purple-900"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      )}
+                    >
+                      <item.icon
+                        className={cn(
+                          "mr-3 flex-shrink-0 h-6 w-6",
+                          item.active
+                            ? "text-purple-500"
+                            : "text-gray-400 group-hover:text-gray-500"
+                        )}
+                      />
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={item.onClick}
+                      className="group flex items-center w-full px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    >
+                      <item.icon className="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500" />
+                      {item.name}
+                    </button>
+                  )}
                 </div>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 mb-2">
-              <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <User className="w-4 h-4 mr-2" />
-                My Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleSignOut}
-                className="text-red-600"
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              ))}
+            </nav>
+
+            {/* User Profile Section */}
+            <div className="flex-shrink-0 p-4 border-t border-gray-200">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start px-2 py-2"
+                  >
+                    <Avatar className="w-8 h-8 mr-3">
+                      <AvatarImage src={session?.user?.image || ""} />
+                      <AvatarFallback className="bg-purple-600 text-white">
+                        {session?.user?.name?.[0] ||
+                          session?.user?.email?.[0] ||
+                          "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 text-left">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {session?.user?.name || "User"}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {session?.user?.email}
+                      </p>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <Link href="/profile">
+                    <DropdownMenuItem>
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
         </div>
-      </nav>
+      </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200 z-50">
+        <div className="grid grid-cols-4 gap-1 p-2">
+          {navigationItems.map((item) => (
+            <div key={item.name}>
+              {item.href ? (
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "flex flex-col items-center justify-center p-2 rounded-lg transition-colors",
+                    item.active
+                      ? "text-purple-600 bg-purple-50"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  )}
+                >
+                  <item.icon className="w-6 h-6" />
+                  <span className="text-xs mt-1">{item.name}</span>
+                </Link>
+              ) : (
+                <button
+                  onClick={item.onClick}
+                  className="flex flex-col items-center justify-center p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors w-full"
+                >
+                  <item.icon className="w-6 h-6" />
+                  <span className="text-xs mt-1">{item.name}</span>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Upload Modal */}
       <VideoUpload
@@ -222,6 +210,9 @@ export function Navigation({ className }: NavigationProps) {
         onClose={() => setIsUploadOpen(false)}
         onSuccess={handleUploadSuccess}
       />
+
+      {/* Main content padding for mobile */}
+      <div className="md:hidden pb-20" />
     </>
   );
 }
