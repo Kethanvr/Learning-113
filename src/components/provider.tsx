@@ -1,3 +1,4 @@
+"use client"
 import { SessionProvider } from "next-auth/react";
 import { ImageKitProvider } from "@imagekit/next";
 import React from "react";
