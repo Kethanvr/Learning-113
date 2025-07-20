@@ -78,11 +78,11 @@ export function Navigation({ className }: NavigationProps) {
     <>
       {/* Desktop Sidebar */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-50">
-        <div className="flex flex-col flex-grow pt-5 bg-white/80 backdrop-blur-md border-r border-gray-200 overflow-y-auto">
+        <div className="flex flex-col flex-grow pt-5 bg-white border-r border-gray-200 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-4">
             <Link href="/" className="flex items-center gap-2">
-              <Play className="w-8 h-8 text-purple-600" />
-              <span className="text-xl font-bold text-gray-900">ReelsPro</span>
+              <Play className="w-8 h-8 text-black" />
+              <span className="text-xl font-bold text-black">ReelsPro</span>
             </Link>
           </div>
 
@@ -96,16 +96,16 @@ export function Navigation({ className }: NavigationProps) {
                       className={cn(
                         "group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors",
                         item.active
-                          ? "bg-purple-100 text-purple-900"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                          ? "bg-black text-white"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-black"
                       )}
                     >
                       <item.icon
                         className={cn(
                           "mr-3 flex-shrink-0 h-6 w-6",
                           item.active
-                            ? "text-purple-500"
-                            : "text-gray-400 group-hover:text-gray-500"
+                            ? "text-white"
+                            : "text-gray-400 group-hover:text-gray-600"
                         )}
                       />
                       {item.name}
@@ -113,9 +113,9 @@ export function Navigation({ className }: NavigationProps) {
                   ) : (
                     <button
                       onClick={item.onClick}
-                      className="group flex items-center w-full px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                      className="group flex items-center w-full px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-100 hover:text-black transition-colors"
                     >
-                      <item.icon className="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500" />
+                      <item.icon className="mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-600" />
                       {item.name}
                     </button>
                   )}
