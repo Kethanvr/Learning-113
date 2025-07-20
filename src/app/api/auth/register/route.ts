@@ -15,21 +15,28 @@ export async function POST(request: NextRequest) {
           status: 400,
         }
       );
-
-      await conntodb();
-
-      const existinguser = await User.findOne({ email });
-      if (existinguser) {
-        return NextResponse.json({ error: "user exist " }, { status: 400 });
-      }
-
-      await User.create({ email, password });
-      return NextResponse.json({ message: "user created " }, { status: 200 });
     }
-  } catch (error) {
+
+    await conntodb();
+
+    const existinguser = await User.findOne({ email });
+    if (existinguser) {
+      return NextResponse.json(
+        { error: "user already exists" },
+        { status: 400 }
+      );
+    }
+
+    await User.create({ email, password });
     return NextResponse.json(
-      { error: "user failed to register  " },
-      { status: 400 }
+      { message: "user created successfully" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Registration error:", error);
+    return NextResponse.json(
+      { error: "user failed to register" },
+      { status: 500 }
     );
   }
 }

@@ -43,10 +43,9 @@ export const authOptions : NextAuthOptions ={
                 id: user._id.toString(),
                 email: user.email ,
             };
-        } catch ( error) {
+        } catch (error) {
             console.error("Error connecting to the database:", error);
-            throw new Error("Database connection failed");{
-            
+            throw new Error("Database connection failed");
         }
      
     }
@@ -73,9 +72,8 @@ export const authOptions : NextAuthOptions ={
 
 
     pages: {
-        signIn: "/auth/login",
-        error: "/auth/login",
-        newUser: "/auth/register", // Will disable the new account creation screen
+        signIn: "/login",
+        error: "/login",
     },
     session: {
         strategy: "jwt",

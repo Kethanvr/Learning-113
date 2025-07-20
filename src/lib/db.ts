@@ -1,39 +1,47 @@
-import { channel } from "diagnostics_channel";
-import mongoose, { connection } from "mongoose";
+import mongoose from "mongoose";
 
-const MongoDB_URI = process.env.MONGODB_URI!
+const MONGODB_URI = process.env.MONGODB_URI!;
 
-if(!MongoDB_URI){
-    throw new Error("mongo db uri is missing");
+if (!MONGODB_URI) {
+  throw new Error("MongoDB URI is missing");
 }
 
-let cached = global.mongoose 
+interface MongooseCache {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
 
-if(!cached){
-    global.mongoose = {
-    conn:null,
-    promise:null,
-};
+declare global {
+  var mongoose: MongooseCache | undefined;
+}
+
+let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
+
+if (!global.mongoose) {
+  global.mongoose = cached;
 }
 
 export async function conntodb() {
-    if(cached.conn){
-        return cached.conn
-    }  
-    if(!cached.promise){
-        const opt ={
-            bufferCommands:true,
-            maxPoolSize:10
-        }
-        mongoose.connect(MongoDB_URI,opt).then(()=> mongoose.connection)
-    }
+  if (cached.conn) {
+    return cached.conn;
+  }
 
-    try {
-       cached.conn = await cached.promise
-    } catch (error) {
-        cached.promise=null
-        throw error
-    }
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      maxPoolSize: 10,
+    };
+    cached.promise = mongoose.connect(MONGODB_URI, opts);
+  }
 
-    return cached.conn
-} 
+  try {
+    cached.conn = await cached.promise;
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    cached.promise = null;
+    console.error("MongoDB connection error:", error);
+    throw error;
+  }
+
+  return cached.conn;
+}
