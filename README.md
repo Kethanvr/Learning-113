@@ -33,7 +33,7 @@ The course provided the base, and the rest of the project was built independentl
 
 ## 📂 Project Structure
 
-The video builds a monolithic Next.js application, not a separate client/server structure.
+This is a monolithic Next.js application, not a separate client/server structure.
 
 ```
 /app
