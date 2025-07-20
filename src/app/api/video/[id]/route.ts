@@ -8,16 +8,17 @@ import mongoose from "mongoose";
 // GET a specific video by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await conntodb();
+    const { id } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid video ID" }, { status: 400 });
     }
 
-    const video = await Video.findById(params.id).lean();
+    const video = await Video.findById(id).lean();
 
     if (!video) {
       return NextResponse.json({ error: "Video not found" }, { status: 404 });
