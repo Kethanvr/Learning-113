@@ -1,39 +1,88 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose from "mongoose";
 
-export const VIDEO_DIMENSION = {
-  height: 1080,
-  width: 1920,
-} as const;
-
-export interface Ivideo {
-  _id?: mongoose.Types.ObjectId;
-  userId: mongoose.Types.ObjectId;
-  videourl: string;
+export interface Ivideo extends mongoose.Document {
   title: string;
-  description: string;
+  desciption: string;
+  videourl: string;
   thumbnailurl: string;
+  userid?: string;
+  username?: string;
+  likes?: number;
+  likedBy?: string[];
+  comments?: Array<{
+    id: string;
+    text: string;
+    username: string;
+    userid: string;
+    createdAt: Date;
+  }>;
+  views?: number;
   controls?: boolean;
   transformation?: {
-    height: number;
-    width: number;
-    quality?: number;
+    width?: number;
+    height?: number;
+    crop?: string;
   };
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-const videoSchema = new Schema<Ivideo>(
+const VideoSchema = new mongoose.Schema<Ivideo>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    videourl: { type: String, required: true },
-    thumbnailurl: { type: String, required: true },
-    controls: { type: Boolean, default: true },
+    title: {
+      type: String,
+      required: true,
+    },
+    desciption: {
+      type: String,
+      required: true,
+    },
+    videourl: {
+      type: String,
+      required: true,
+    },
+    thumbnailurl: {
+      type: String,
+      required: true,
+    },
+    userid: {
+      type: String,
+      default: "",
+    },
+    username: {
+      type: String,
+      default: "",
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    likedBy: [
+      {
+        type: String,
+      },
+    ],
+    comments: [
+      {
+        id: String,
+        text: String,
+        username: String,
+        userid: String,
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    views: {
+      type: Number,
+      default: 0,
+    },
+    controls: {
+      type: Boolean,
+      default: true,
+    },
     transformation: {
-      height: { type: Number, default: VIDEO_DIMENSION.height },
-      width: { type: Number, default: VIDEO_DIMENSION.width },
-      quality: { type: Number, min: 1, max: 100 },
+      width: Number,
+      height: Number,
+      crop: String,
     },
   },
   {
@@ -41,6 +90,6 @@ const videoSchema = new Schema<Ivideo>(
   }
 );
 
-const Video = models?.Video || model<Ivideo>("Video", videoSchema);
-
+const Video =
+  mongoose.models.Video || mongoose.model<Ivideo>("Video", VideoSchema);
 export default Video;
