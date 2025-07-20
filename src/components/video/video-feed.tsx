@@ -8,18 +8,40 @@ import { RefreshCw, Wifi, WifiOff, Play } from "lucide-react";
 import { apiClient } from "@/lib/api-client";
 import { useSession } from "next-auth/react";
 
+interface Comment {
+  id: string;
+  text: string;
+  username: string;
+  userid: string;
+  createdAt: Date;
+}
+
 interface Video {
   _id: string;
   title: string;
-  description: string;
+  desciption: string;
   videourl: string;
   thumbnailurl: string;
-  userId: {
-    _id: string;
-    email: string;
-  };
+  userId: string;
+  username: string;
+  likes: number;
+  views: number;
+  likedBy?: string[];
+  comments?: Comment[];
   controls?: boolean;
   createdAt: string;
+}
+
+interface ApiResponse {
+  videos: Video[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalVideos: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+    limit: number;
+  };
 }
 
 interface VideoFeedProps {
@@ -45,24 +67,34 @@ export function VideoFeed({ className }: VideoFeedProps) {
         if (pageNum === 1) setLoading(true);
         else setLoadingMore(true);
 
-        const response = await apiClient.get(
+        const response = await apiClient.get<ApiResponse>(
           `/api/video?page=${pageNum}&limit=5`
         );
-        const { videos: newVideos, pagination } = response;
+
+        // Defensive check for response structure
+        if (!response || typeof response !== "object") {
+          throw new Error("Invalid API response");
+        }
+
+        const { videos: newVideos = [], pagination } = response;
 
         if (append) {
-          setVideos((prev) => [...prev, ...newVideos]);
+          setVideos((prev) => [...prev, ...(newVideos || [])]);
         } else {
-          setVideos(newVideos);
+          setVideos(newVideos || []);
           setCurrentVideoIndex(0);
         }
 
-        setHasMore(pagination.hasNext);
+        setHasMore(pagination?.hasNext ?? false);
         setPage(pageNum);
         setError(null);
       } catch (err: any) {
         console.error("Failed to fetch videos:", err);
         setError(err.message || "Failed to load videos");
+        // Set empty array on error to prevent undefined issues
+        if (!append) {
+          setVideos([]);
+        }
       } finally {
         setLoading(false);
         setLoadingMore(false);
