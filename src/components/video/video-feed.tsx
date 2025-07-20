@@ -158,14 +158,43 @@ export function VideoFeed({ className }: VideoFeedProps) {
 
   // Loading skeleton component
   const LoadingSkeleton = () => (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex items-center justify-center">
-      <div className="w-full max-w-sm mx-auto p-6 space-y-4">
-        <div className="animate-pulse">
-          <div className="aspect-[9/16] bg-gray-800 rounded-2xl mb-4"></div>
-          <div className="space-y-3">
-            <div className="h-4 bg-gray-800 rounded-full w-3/4"></div>
-            <div className="h-4 bg-gray-800 rounded-full w-1/2"></div>
-            <div className="h-3 bg-gray-800 rounded-full w-2/3"></div>
+    <div className="h-screen bg-black flex items-center justify-center relative">
+      <div className="w-full h-full max-w-sm mx-auto relative">
+        {/* Video skeleton */}
+        <Skeleton className="w-full h-full bg-gray-800 rounded-none" />
+
+        {/* Play button skeleton */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Skeleton className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-700" />
+        </div>
+
+        {/* Bottom controls skeleton */}
+        <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
+          <div className="flex items-end justify-between">
+            {/* Info section skeleton */}
+            <div className="flex-1 pr-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <Skeleton className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-700" />
+                <Skeleton className="h-4 w-24 bg-gray-700" />
+              </div>
+              <Skeleton className="h-5 w-3/4 bg-gray-700" />
+              <Skeleton className="h-4 w-full bg-gray-700" />
+              <Skeleton className="h-4 w-2/3 bg-gray-700" />
+            </div>
+
+            {/* Action buttons skeleton */}
+            <div className="flex flex-col gap-3 sm:gap-4">
+              <div className="flex flex-col items-center">
+                <Skeleton className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700" />
+                <Skeleton className="w-6 h-3 mt-1 bg-gray-700" />
+              </div>
+              <div className="flex flex-col items-center">
+                <Skeleton className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700" />
+                <Skeleton className="w-4 h-3 mt-1 bg-gray-700" />
+              </div>
+              <Skeleton className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700" />
+              <Skeleton className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-700" />
+            </div>
           </div>
         </div>
       </div>
