@@ -1,5 +1,5 @@
 import { conntodb } from "@/lib/db";
-import Video, { Ivideo } from "@/modles/Video";
+import Video, { Ivideo } from "@/models/Video";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";

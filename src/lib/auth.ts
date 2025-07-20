@@ -1,6 +1,6 @@
 import { conntodb } from "@/lib/db";
 import { NextAuthOptions } from "next-auth";
-import User from "@/modles/user";
+import User from "@/models/user";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 

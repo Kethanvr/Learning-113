@@ -1,4 +1,4 @@
-import User from "@/modles/user";
+import User from "@/models/user";
 import { conntodb } from "@/lib/db";
 import { NextServer } from "next/dist/server/next";
 import { NextRequest, NextResponse } from "next/server";
