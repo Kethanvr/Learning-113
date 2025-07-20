@@ -2,130 +2,155 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Video,
-  Sparkles,
-  Share2,
   Heart,
+  Share2,
   MessageCircle,
-  Zap,
   Globe,
   Shield,
   Smartphone,
+  Users,
+  Zap,
+  Eye,
 } from "lucide-react";
+import Link from "next/link";
 
 export function FeaturesSection() {
   const features = [
     {
       icon: Video,
-      title: "HD Video Quality",
+      title: "Simple Video Sharing",
       description:
-        "Upload and stream videos in crystal clear HD quality with automatic optimization.",
-      gradient: "from-purple-500 to-pink-500",
-    },
-    {
-      icon: Sparkles,
-      title: "AI-Powered Editing",
-      description:
-        "Smart filters and effects powered by AI to make your content stand out.",
-      gradient: "from-blue-500 to-cyan-500",
-    },
-    {
-      icon: Share2,
-      title: "Easy Sharing",
-      description:
-        "Share your creations across platforms with one click and reach wider audiences.",
-      gradient: "from-green-500 to-emerald-500",
+        "Upload your moments directly. No watermarks, no complicated editing tools.",
+      highlight: "Just pure sharing",
     },
     {
       icon: Heart,
-      title: "Engagement Tools",
+      title: "Meaningful Interactions",
       description:
-        "Like, comment, and interact with your favorite creators and build your community.",
-      gradient: "from-red-500 to-pink-500",
+        "Real likes and comments from people who actually watched your content.",
+      highlight: "Authentic engagement",
     },
     {
-      icon: Zap,
-      title: "Lightning Fast",
-      description:
-        "Experience blazing fast uploads, streaming, and interactions with optimized performance.",
-      gradient: "from-yellow-500 to-orange-500",
+      icon: Users,
+      title: "Creator-First",
+      description: "Built by creators, for creators. Your content stays yours.",
+      highlight: "No hidden algorithms",
     },
     {
       icon: Globe,
       title: "Global Reach",
       description:
-        "Connect with creators and audiences from every corner of the world.",
-      gradient: "from-indigo-500 to-purple-500",
+        "Share with friends, family, or the world. You control who sees what.",
+      highlight: "Your choice, your audience",
     },
   ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4 px-4 py-2">
-            <Sparkles className="w-4 h-4 mr-2" />
-            Features
-          </Badge>
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-gray-900 mb-6">
-            Everything You Need to
-            <span className="block bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              Create Amazing Content
-            </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Why Creators Choose ReelsPro
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            ReelsPro provides all the tools and features you need to create,
-            share, and grow your audience with stunning short-form videos.
+            We built ReelsPro differently. No dark patterns, no exploitation,
+            just a platform that helps you share your creativity with the world.
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group border-0 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 bg-white/80 backdrop-blur-sm"
+              className="group border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-300 bg-white"
             >
               <CardContent className="p-8">
-                <div
-                  className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <feature.icon className="w-8 h-8 text-white" />
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gray-200 transition-colors duration-300">
+                    <feature.icon className="w-6 h-6 text-gray-700" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed mb-3">
+                      {feature.description}
+                    </p>
+                    <Badge
+                      variant="outline"
+                      className="text-gray-700 border-gray-300"
+                    >
+                      {feature.highlight}
+                    </Badge>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {feature.description}
-                </p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-12 text-white">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <Smartphone className="w-8 h-8" />
-              <Shield className="w-8 h-8" />
-              <Globe className="w-8 h-8" />
-            </div>
-            <h3 className="text-3xl font-bold mb-4">Ready to Get Started?</h3>
-            <p className="text-xl text-purple-100 mb-6 max-w-2xl mx-auto">
-              Join thousands of creators who are already using ReelsPro to share
-              their stories and grow their audience.
+        {/* Stats Section */}
+        <div className="bg-gray-50 rounded-3xl p-8 md:p-12 mb-16">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Real Numbers, Real Growth
+            </h3>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Our community is growing because we focus on what matters:
+              authentic content and genuine connections.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-purple-600 hover:bg-gray-100 font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 hover:scale-105">
-                Start Creating Today
-              </button>
-              <button className="border-2 border-white/30 text-white hover:bg-white/10 font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300">
-                Learn More
-              </button>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-2">99%</div>
+              <div className="text-gray-600">Creator Satisfaction</div>
             </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-2">2.5M</div>
+              <div className="text-gray-600">Videos Uploaded</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-2">45%</div>
+              <div className="text-gray-600">Monthly Growth</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-2">24/7</div>
+              <div className="text-gray-600">Creator Support</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Testimonial */}
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-3xl p-8 md:p-12 text-white text-center">
+          <blockquote className="text-xl md:text-2xl font-medium mb-6 leading-relaxed">
+            "Finally, a platform that doesn't feel like it's working against me.
+            ReelsPro just lets me share my cooking videos without the stress."
+          </blockquote>
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              <Users className="w-6 h-6" />
+            </div>
+            <div className="text-left">
+              <div className="font-semibold">Sarah Chen</div>
+              <div className="text-purple-200">Food Creator, 50K followers</div>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <Link href="/register">
+              <Button
+                size="lg"
+                className="bg-white text-purple-600 hover:bg-gray-100 font-semibold px-8 py-4 rounded-xl transition-all duration-300 hover:scale-105"
+              >
+                Join Sarah and 10K+ creators
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
