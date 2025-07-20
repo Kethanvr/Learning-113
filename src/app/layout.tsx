@@ -3,6 +3,7 @@ import { Inter, Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Provider from "@/components/provider";
 import { Navigation } from "@/components/layout/navigation";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,15 +25,8 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "ReelsPro - Create and Share Short Videos",
   description:
-    "A modern platform for creating and sharing short-form videos. Upload, discover, and engage with amazing content from creators worldwide.",
-  keywords: [
-    "reels",
-    "short videos",
-    "social media",
-    "video sharing",
-    "content creation",
-  ],
-  authors: [{ name: "ReelsPro Team" }],
+    "Share your moments, tell your story, and connect with creators worldwide on ReelsPro.",
+  keywords: "videos, reels, short videos, social media, creators, content",
 };
 
 export const viewport = {
@@ -53,8 +47,9 @@ export default function RootLayout({
         <Provider>
           <div className="min-h-screen bg-background">
             <Navigation />
-            <main className="md:ml-64 pb-16 md:pb-0">{children}</main>
+            <main className="relative">{children}</main>
           </div>
+          <Toaster position="top-right" richColors />
         </Provider>
       </body>
     </html>
