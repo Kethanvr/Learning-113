@@ -1,6 +1,6 @@
 import { authOptions } from "@/lib/auth";
 import { conntodb } from "@/lib/db";
-import Video , {Ivideo} from "@/models/Video";
+import Video, { Ivideo } from "@/models/Video";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       transformation: {
         height: 1920,
         width: 1080,
-        quality: body.transformation?.quality ?? 100,
+        crop: "maintain_ratio",
       },
     };
     const newVideo = await Video.create(videoData);

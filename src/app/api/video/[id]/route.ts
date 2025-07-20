@@ -37,7 +37,7 @@ export async function GET(
 // UPDATE a specific video by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -46,15 +46,16 @@ export async function PUT(
     }
 
     await conntodb();
+    const { id } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid video ID" }, { status: 400 });
     }
 
     const body: Partial<Ivideo> = await request.json();
 
     // Find the video and check ownership
-    const existingVideo = await Video.findById(params.id);
+    const existingVideo = await Video.findById(id);
     if (!existingVideo) {
       return NextResponse.json({ error: "Video not found" }, { status: 404 });
     }
@@ -70,7 +71,7 @@ export async function PUT(
     const updateData: Partial<Ivideo> = {};
 
     if (body.title) updateData.title = body.title;
-    if (body.description) updateData.description = body.description;
+    if (body.desciption) updateData.desciption = body.desciption;
     if (body.videourl) updateData.videourl = body.videourl;
     if (body.thumbnailurl) updateData.thumbnailurl = body.thumbnailurl;
     if (body.controls !== undefined) updateData.controls = body.controls;
@@ -79,11 +80,11 @@ export async function PUT(
       updateData.transformation = {
         height: body.transformation.height || VIDEO_DIMENSION.height,
         width: body.transformation.width || VIDEO_DIMENSION.width,
-        quality: body.transformation.quality || 100,
+        crop: body.transformation.crop || "maintain_ratio",
       };
     }
 
-    const updatedVideo = await Video.findByIdAndUpdate(params.id, updateData, {
+    const updatedVideo = await Video.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -101,7 +102,7 @@ export async function PUT(
 // DELETE a specific video by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -110,13 +111,14 @@ export async function DELETE(
     }
 
     await conntodb();
+    const { id } = await params;
 
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: "Invalid video ID" }, { status: 400 });
     }
 
     // Find the video and check ownership
-    const existingVideo = await Video.findById(params.id);
+    const existingVideo = await Video.findById(id);
     if (!existingVideo) {
       return NextResponse.json({ error: "Video not found" }, { status: 404 });
     }
@@ -128,7 +130,7 @@ export async function DELETE(
       );
     }
 
-    await Video.findByIdAndDelete(params.id);
+    await Video.findByIdAndDelete(id);
 
     return NextResponse.json(
       { message: "Video deleted successfully" },

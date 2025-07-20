@@ -10,12 +10,10 @@ import {
   Search,
   TrendingUp,
   Flame,
-  Users,
   Hash,
   Play,
   Heart,
   Eye,
-  Filter,
   Clock,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";

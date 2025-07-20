@@ -64,7 +64,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Video ID required" }, { status: 400 });
     }
 
-    const video = await Video.findById(videoId).select("comments").lean();
+    const video = (await Video.findById(videoId).select("comments").lean()) as {
+      comments?: any[];
+    } | null;
     if (!video) {
       return NextResponse.json({ error: "Video not found" }, { status: 404 });
     }

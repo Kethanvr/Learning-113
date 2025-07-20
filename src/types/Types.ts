@@ -1,11 +1,4 @@
-import { Connection } from "mongoose";
-import { promises } from "node:dns";
+// This file is for shared types across the application
+// The mongoose global types are handled in lib/db.ts
 
-declare global {
-  var mongoose :{
-        conn : Connection | null,
-        promise : Promise<Connection> | null
-  }
-}
-
-export {}
+export {};

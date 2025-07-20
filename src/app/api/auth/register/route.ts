@@ -1,8 +1,6 @@
 import User from "@/models/user";
 import { conntodb } from "@/lib/db";
-import { NextServer } from "next/dist/server/next";
 import { NextRequest, NextResponse } from "next/server";
-import { error } from "console";
 
 export async function POST(request: NextRequest) {
   try {

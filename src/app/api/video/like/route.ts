@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     if (isLiked) {
       // Unlike
-      video.likedBy = video.likedBy.filter((id) => id !== userId);
+      video.likedBy = video.likedBy.filter((id: string) => id !== userId);
       video.likes = Math.max(0, (video.likes || 0) - 1);
     } else {
       // Like
