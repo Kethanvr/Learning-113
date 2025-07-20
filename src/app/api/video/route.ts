@@ -1,50 +1,53 @@
-import { conntodb } from "@/lib/db";
-import Video, { Ivideo, VIDEO_DIMENSION } from "@/models/Video";
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { conntodb } from "@/lib/db";
+import Video, { Ivideo } from "@/models/Video";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
     await conntodb();
 
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
+    const trending = searchParams.get("trending");
     const limit = parseInt(searchParams.get("limit") || "10");
-    const userId = searchParams.get("userId");
+    const page = parseInt(searchParams.get("page") || "1");
 
-    const skip = (page - 1) * limit;
+    let query = Video.find({});
 
-    // Build query
-    const query = userId ? { userId } : {};
+    if (trending === "true") {
+      // Sort by likes and views for trending
+      query = query.sort({ likes: -1, views: -1, createdAt: -1 });
+    } else {
+      query = query.sort({ createdAt: -1 });
+    }
 
-    const [videos, totalCount] = await Promise.all([
-      Video.find(query)
-        .sort({ createdAt: -1 }) // Latest first
-        .skip(skip)
-        .limit(limit)
-        .populate("userId", "email") // Populate user info
-        .lean(),
-      Video.countDocuments(query),
-    ]);
+    // Get total count for pagination
+    const totalVideos = await Video.countDocuments(query.getFilter());
 
-    const totalPages = Math.ceil(totalCount / limit);
+    const videos = await query
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .lean();
 
-    return NextResponse.json(
-      {
-        videos,
-        pagination: {
-          currentPage: page,
-          totalPages,
-          totalCount,
-          hasNext: page < totalPages,
-          hasPrev: page > 1,
-        },
+    // Calculate pagination info
+    const totalPages = Math.ceil(totalVideos / limit);
+    const hasNext = page < totalPages;
+    const hasPrev = page > 1;
+
+    return NextResponse.json({
+      videos,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalVideos,
+        hasNext,
+        hasPrev,
+        limit,
       },
-      { status: 200 }
-    );
+    });
   } catch (error) {
-    console.error("Videos fetch error:", error);
+    console.error("Video fetch error:", error);
     return NextResponse.json(
       { error: "Failed to fetch videos" },
       { status: 500 }
@@ -55,55 +58,43 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user?.id) {
-      return NextResponse.json(
-        { error: "unauthorized" },
-        {
-          status: 401,
-        }
-      );
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     await conntodb();
 
-    const body: Partial<Ivideo> = await request.json();
-
+    const body: Ivideo = await request.json();
     if (
       !body.title ||
-      !body.description ||
+      !body.desciption ||
       !body.videourl ||
       !body.thumbnailurl
     ) {
       return NextResponse.json(
-        {
-          error: "title, description, videourl, and thumbnailurl are required",
-        },
-        {
-          status: 400,
-        }
+        { error: "Missing required fields" },
+        { status: 400 }
       );
     }
 
-    const videodata = {
+    const videoData = {
       ...body,
-      userId: session.user.id,
       controls: body?.controls ?? true,
       transformation: {
-        height: body.transformation?.height || VIDEO_DIMENSION.height,
-        width: body.transformation?.width || VIDEO_DIMENSION.width,
-        quality: body.transformation?.quality || 100,
+        width: 400,
+        height: 600,
+        crop: "maintain_ratio",
       },
     };
 
-    const newVideo = await Video.create(videodata);
+    const newVideo = new Video(videoData);
+    await newVideo.save();
 
-    return NextResponse.json(newVideo, {
-      status: 201,
-    });
+    return NextResponse.json(newVideo, { status: 201 });
   } catch (error) {
-    console.error("Video creation error:", error);
+    console.error("Error saving video:", error);
     return NextResponse.json(
-      { error: "failed to create video" },
+      { error: "Failed to save video" },
       { status: 500 }
     );
   }
