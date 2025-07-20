@@ -140,12 +140,12 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Search Header */}
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl font-bold text-black mb-4">
               Discover Amazing Content
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -163,12 +163,12 @@ export default function SearchPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Search for videos, creators, or hashtags..."
-                className="pl-12 pr-20 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-purple-400 focus:ring-purple-400"
+                className="pl-12 pr-20 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-black focus:ring-black"
               />
               <Button
                 onClick={() => handleSearch()}
                 disabled={!searchQuery.trim()}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black hover:bg-gray-800 text-white rounded-lg"
               >
                 Search
               </Button>
@@ -216,21 +216,21 @@ export default function SearchPage() {
           <TabsList className="grid w-full grid-cols-3 bg-white border border-gray-200 rounded-2xl p-1 mb-8">
             <TabsTrigger
               value="discover"
-              className="rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 data-[state=active]:text-white"
+              className="rounded-xl data-[state=active]:bg-black data-[state=active]:text-white"
             >
               <TrendingUp className="w-4 h-4 mr-2" />
               Discover
             </TabsTrigger>
             <TabsTrigger
               value="trending"
-              className="rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 data-[state=active]:text-white"
+              className="rounded-xl data-[state=active]:bg-black data-[state=active]:text-white"
             >
               <Flame className="w-4 h-4 mr-2" />
               Trending
             </TabsTrigger>
             <TabsTrigger
               value="results"
-              className="rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 data-[state=active]:text-white"
+              className="rounded-xl data-[state=active]:bg-black data-[state=active]:text-white"
             >
               <Search className="w-4 h-4 mr-2" />
               Results
@@ -319,7 +319,7 @@ export default function SearchPage() {
                         playsInline
                       />
                       <div className="absolute top-4 left-4">
-                        <Badge className="bg-gradient-to-r from-red-500 to-pink-500 text-white border-0">
+                        <Badge className="bg-black text-white border-0">
                           <Flame className="w-3 h-3 mr-1" />#{index + 1}
                         </Badge>
                       </div>
