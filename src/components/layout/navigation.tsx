@@ -173,7 +173,7 @@ export function Navigation({ className }: NavigationProps) {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-200 z-50">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
         <div className="grid grid-cols-4 gap-1 p-2">
           {navigationItems.map((item) => (
             <div key={item.name}>
@@ -183,8 +183,8 @@ export function Navigation({ className }: NavigationProps) {
                   className={cn(
                     "flex flex-col items-center justify-center p-2 rounded-lg transition-colors",
                     item.active
-                      ? "text-purple-600 bg-purple-50"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                      ? "text-white bg-black"
+                      : "text-gray-600 hover:text-black hover:bg-gray-100"
                   )}
                 >
                   <item.icon className="w-6 h-6" />
@@ -193,7 +193,7 @@ export function Navigation({ className }: NavigationProps) {
               ) : (
                 <button
                   onClick={item.onClick}
-                  className="flex flex-col items-center justify-center p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors w-full"
+                  className="flex flex-col items-center justify-center p-2 rounded-lg text-gray-600 hover:text-black hover:bg-gray-100 transition-colors w-full"
                 >
                   <item.icon className="w-6 h-6" />
                   <span className="text-xs mt-1">{item.name}</span>
